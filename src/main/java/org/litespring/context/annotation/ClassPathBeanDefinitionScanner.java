@@ -18,7 +18,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class ClassPathBeanDefinitionScanner {
-	
 
 	private final BeanDefinitionRegistry registry;
 	
@@ -33,10 +32,11 @@ public class ClassPathBeanDefinitionScanner {
 	}
 	
 	public Set<BeanDefinition> doScan(String packagesToScan) {
-		
+		//按照逗号分隔
 		String[] basePackages = StringUtils.tokenizeToStringArray(packagesToScan,",");
 		
 		Set<BeanDefinition> beanDefinitions = new LinkedHashSet<BeanDefinition>();
+		//遍历每一个路径
 		for (String basePackage : basePackages) {
 			Set<BeanDefinition> candidates = findCandidateComponents(basePackage);
 			for (BeanDefinition candidate : candidates) {
@@ -53,18 +53,20 @@ public class ClassPathBeanDefinitionScanner {
 	public Set<BeanDefinition> findCandidateComponents(String basePackage) {
 		Set<BeanDefinition> candidates = new LinkedHashSet<BeanDefinition>();
 		try {
-			
+			//转化为resources对象
 			Resource[] resources = this.resourceLoader.getResources(basePackage);
 			
 			for (Resource resource : resources) {
 				try {
 					
 					MetadataReader metadataReader = new SimpleMetadataReader(resource);
-				
+					//是否有Component注解
 					if(metadataReader.getAnnotationMetadata().hasAnnotation(Component.class.getName())){
 						ScannedGenericBeanDefinition sbd = new ScannedGenericBeanDefinition(metadataReader.getAnnotationMetadata());
+						//拿到BeanName
 						String beanName = this.beanNameGenerator.generateBeanName(sbd, this.registry);
 						sbd.setId(beanName);
+						//添加到Set<BeanDefinition> candidates中
 						candidates.add(sbd);					
 					}
 				}

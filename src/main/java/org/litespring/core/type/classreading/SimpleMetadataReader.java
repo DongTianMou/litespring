@@ -1,6 +1,4 @@
 package org.litespring.core.type.classreading;
-
-
 import org.litespring.core.io.Resource;
 import org.litespring.core.type.AnnotationMetadata;
 import org.litespring.core.type.ClassMetadata;
@@ -10,7 +8,6 @@ import org.springframework.asm.ClassReader;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
 
 public class SimpleMetadataReader implements MetadataReader {
 
@@ -22,6 +19,7 @@ public class SimpleMetadataReader implements MetadataReader {
 
 	public SimpleMetadataReader(Resource resource) throws IOException {
 		InputStream is = new BufferedInputStream(resource.getInputStream());
+		//asm提供
 		ClassReader classReader;
 		try {
 			classReader = new ClassReader(is);
@@ -29,7 +27,9 @@ public class SimpleMetadataReader implements MetadataReader {
 		finally {
 			is.close();
 		}
+
 		AnnotationMetadataReadingVisitor visitor = new AnnotationMetadataReadingVisitor();
+		//read调用accept()方法时，visitor回逐步调用visitxxx()去读取字节码
 		classReader.accept(visitor, ClassReader.SKIP_DEBUG);
 
 		this.annotationMetadata = visitor;

@@ -10,7 +10,9 @@ public class ApplicationContextTest4 {
 
 	@Test
 	public void testGetBeanProperty() {
+		//把文件中bean或者注解都注入了容器中
 		ApplicationContext ctx = new ClassPathXmlApplicationContext("petstore-v4.xml");
+		//创建Bean
 		PetStoreService petStore = (PetStoreService)ctx.getBean("petStore");
 		
 		Assert.assertNotNull(petStore.getAccountDao());

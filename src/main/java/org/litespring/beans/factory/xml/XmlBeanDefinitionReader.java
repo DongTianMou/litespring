@@ -93,8 +93,11 @@ public class XmlBeanDefinitionReader {
 	}
 
 	private void parseComponentElement(Element ele) {
+		//提取属性base-package中的值 org.litespring.service.v4,org.litespring.dao.v4
 		String basePackages = ele.attributeValue(BASE_PACKAGE_ATTRIBUTE);
+		//让scanner持有工厂对象
 		ClassPathBeanDefinitionScanner scanner = new ClassPathBeanDefinitionScanner(registry);
+		//将base-package中的值作为参数传进doScan方法
 		scanner.doScan(basePackages);
 
 	}
